@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 contract MoonLotto {
     /* Attributes */
     address[] public players;
-    mapping(address => bool) public isGift;
+    bool[] public isGift;
     address[] public winners;
     uint256 public lastTime;
     uint256 public ticketPrice;
@@ -52,7 +52,7 @@ contract MoonLotto {
     */
     function joinLottery() public payable {
         // Mark as not gift
-        isGift[msg.sender] = false;
+        isGift.push(false);
         // Enter Lottery
         enterLottery(msg.sender);
     }
@@ -62,7 +62,7 @@ contract MoonLotto {
     */
     function giftTicket(address _recipient) public payable {
         // Mark as gift
-        isGift[_recipient] = true;
+        isGift.push(true);
         // Enter Lottery
         enterLottery(_recipient);
     }
@@ -78,7 +78,7 @@ contract MoonLotto {
         // Update prize Amount
         prizeAmount = address(this).balance;
         // Emit event
-        emit PlayerJoined(_entry, currentRound, isGift[_entry], prizeAmount);
+        emit PlayerJoined(_entry, currentRound, isGift[isGift.length-1], prizeAmount);
         // Pick Winner if conditions are met
         if (
             block.timestamp >= lastTime + lotteryRoundTime &&
@@ -100,7 +100,7 @@ contract MoonLotto {
         emit LotteryResult(
             winner,
             currentRound,
-            isGift[winner],
+            isGift[isGift.length-1],
             prizeAmount,
             block.timestamp
         );
@@ -109,10 +109,8 @@ contract MoonLotto {
         currentRound++;
         lastTime = block.timestamp;
         // Reset variables
-        for (uint256 i = 0; i < players.length; i++) {
-            isGift[players[i]] = false;
-        }
-        players = new address[](0);
+        delete players;
+        delete isGift;
         prizeAmount = 0;
     }
 
@@ -141,7 +139,7 @@ contract MoonLotto {
     /**
         Generate pseudo-random number ( ONLY FOR TESTING - NOT SAFE)
     */
-    function random() public view returns (uint256) {
+    function random() internal view returns (uint256) {
         return
             uint256(
                 keccak256(
