@@ -2,19 +2,11 @@ import {
   PlayerJoined,
   LotteryResult,
 } from "./types/MoonLotto/MoonLotto";
-import { Round, Player, RoundPlayer, Winner } from "./types/schema";
+import { Round, Player, Ticket, Winner } from "./types/schema";
 
 export function handlePlayerJoined(event: PlayerJoined): void {
-  // ID for the player == issuer address
-  let playerId = event.params.player.toHex();
-  // try to load Player from previous rounds
-  let player = Player.load(playerId);
-  // if player doesn't exists, create it
-  if (player == null) {
-    player = new Player(playerId);
-  }
-
-  // ID for the round == round number
+  // ID for the round:
+  // round number
   let roundId = event.params.round.toString();
   // try to load Round from a previous player
   let round = Round.load(roundId);
@@ -23,46 +15,55 @@ export function handlePlayerJoined(event: PlayerJoined): void {
     round = new Round(roundId);
   }
   round.index = event.params.round;
-  round.currentPrize = event.params.prizeAmount;
+  round.prize = event.params.prizeAmount;
 
   round.save();
 
-  // ID for the roundPlayer == "round_number" + "-" + "player_address" 
-  let roundPlayerId = roundId + "-" + playerId;
-  // try to load Round from a previous player
-  let roundPlayer = RoundPlayer.load(roundPlayerId);
-  // if roundplayer doesn't exists, create it
-  if (roundPlayer == null) {
-    roundPlayer = new RoundPlayer(roundPlayerId);
+  // ID for the player:
+  // issuer address
+  let playerId = event.params.player.toHex();
+  // try to load Player from previous rounds
+  let player = Player.load(playerId);
+  // if player doesn't exists, create it
+  if (player == null) {
+    player = new Player(playerId);
   }
-  roundPlayer.round = roundId;
-  roundPlayer.player = playerId;
-
-  roundPlayer.save();
-  
-  // update player fields
   player.address = event.params.player;
-  player.isGifted = event.params.isGifted;
+
   player.save();
+
+  // ID for the ticket:
+  // "round_number" + "-" + "player_address" + "-" + "ticket_index_per_round"
+  let nextTicketIndex = event.params.ticketIndex.toString();
+  let ticketId = roundId + "-" + playerId + "-" + nextTicketIndex;
+
+  let ticket = new Ticket(ticketId);
+  ticket.round = roundId;
+  ticket.player = playerId;
+  ticket.isGifted = event.params.isGifted;
+
+  ticket.save();  
 }
 
 export function handleLotteryResult(event: LotteryResult): void {
-  let playerId = event.params.winner.toHex();  
-  let roundId = event.params.round.toString();  
-  // ID of the winner == "round_number" + "-" + "player_address" 
-  let winnerId = roundId + "-" + playerId;
-  let winner = new Winner(winnerId);
-
-  // ID for the round == round number
-  let round = Round.load(roundId);
-
-  round.currentPrize = event.params.prizeAmount;
+  let roundId = event.params.round.toString();    
+  // ID for the round:
+  // round number
+  let round = Round.load(roundId);  
+  round.prize = event.params.prizeAmount;
   
   round.save();
-
-  winner.player = playerId;
-  winner.round = roundId;
-  winner.prize = event.params.prizeAmount;
+  
+  let ticketIndex = event.params.ticketIndex.toString();
+  let playerId = event.params.winner.toHex();  
+  let ticketId = roundId + "-" + playerId + "-" + ticketIndex;
+  // ID for the winner (same as ticket):
+  // "round_number" + "-" + "player_address" + "-" + "ticket_index"
+  let winnerId = roundId + "-" + playerId + "-" + ticketIndex;
+  let winner = new Winner(winnerId);
+  
+  winner.ticket = ticketId;
   winner.timestamp = event.params.timestamp;
+
   winner.save();
 }
