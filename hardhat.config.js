@@ -8,7 +8,7 @@ task("deploy_contracts", "Deploys the MoonLotto contract")
   .addOptionalParam("lotteryRoundTime", "Seconds that a lottery round will be open for submissions")
   .addOptionalParam("minRoundPlayers", "Minimum number of players in a lottery round to pick a winner")
   .setAction(async (taskArgs) => {
-    const ticketPrice = taskArgs.ticketPrice ? ethers.utils.parseUnits(taskArgs.ticketPrice, "eth") : ethers.utils.parseUnits("1", "gwei");
+    const ticketPrice = taskArgs.ticketPrice ? ethers.utils.parseUnits(taskArgs.ticketPrice, "ether") : ethers.utils.parseUnits("1", "gwei");
     const lotteryRoundTime = taskArgs.lotteryRoundTime || 1800;
     const minRoundPlayers = taskArgs.minRoundPlayers || 10;
 
