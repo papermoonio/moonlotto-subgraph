@@ -5,8 +5,8 @@
   "version": "0.1.0",
   "scripts": {
     "contract-build": "npx hardhat compile",
-    "contract-deploy": "npx hardhat deploy_contracts",
-    "contract-deploy-local": "npx hardhat deploy_contracts --network standalone",
+    "contract-deploy": "npx hardhat deploy_contracts --lottery-round-time 1800 --min-round-players 10 --ticket-price 1",
+    "contract-deploy-local": "npx hardhat deploy_contracts --network standalone --lottery-round-time 10 --min-round-players 3",
     "create": "npx graph create PureStake/moonlotto-moonbase --node https://api.thegraph.com/deploy/",
     "create-staging": "npx graph create PureStake/moonlotto-moonbase --node https://api.staging.thegraph.com/deploy/",
     "create-local": "npx graph create PureStake/moonlotto-standalone --node http://127.0.0.1:8020",
