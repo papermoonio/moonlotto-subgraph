@@ -24,7 +24,7 @@ dataSources:
         - name: MoonLotto
           file: ./artifacts/contracts/MoonLotto.sol/MoonLotto.json
       eventHandlers:
-        - event: PlayerJoined(address,uint256,bool,uint256)
+        - event: PlayerJoined(uint256,address,uint256,bool,uint256)
           handler: handlePlayerJoined
-        - event: LotteryResult(address,uint256,bool,uint256,uint256)
+        - event: LotteryResult(uint256,address,uint256,bool,uint256,uint256)
           handler: handleLotteryResult

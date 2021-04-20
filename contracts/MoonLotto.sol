@@ -17,12 +17,14 @@ contract MoonLotto {
 
     /* Events */
     event PlayerJoined(
+        uint256 ticketIndex,
         address player,
         uint256 round,
         bool isGifted,
         uint256 prizeAmount
     );
     event LotteryResult(
+        uint256 ticketIndex,
         address winner,
         uint256 round,
         bool isGifted,
@@ -71,14 +73,21 @@ contract MoonLotto {
         Enter lottery
     */
     function enterLottery(address _entry) internal {
-        require(msg.value == ticketPrice, "Amount sent less than minimum");
+        require(msg.value >= ticketPrice, "Amount sent less than minimum");
+        require(msg.value <= ticketPrice, "Amount sent more than minimum");
 
         // Add the address entry as a player
         players.push(_entry);
         // Update prize Amount
         prizeAmount = address(this).balance;
         // Emit event
-        emit PlayerJoined(_entry, currentRound, isGift[isGift.length-1], prizeAmount);
+        emit PlayerJoined(
+            players.length - 1,
+            _entry,
+            currentRound,
+            isGift[isGift.length - 1],
+            prizeAmount
+        );
         // Pick Winner if conditions are met
         if (
             block.timestamp >= lastTime + lotteryRoundTime &&
@@ -93,14 +102,16 @@ contract MoonLotto {
     */
     function pickWinner() internal {
         // Pick a pseudo-random winner
-        address winner = players[random() % players.length];
+        uint256 ticketIndex = random() % players.length;
+        address winner = players[ticketIndex];
         // Transfer funds
         payable(winner).transfer(address(this).balance);
         // Emit event
         emit LotteryResult(
+            ticketIndex,
             winner,
             currentRound,
-            isGift[isGift.length-1],
+            isGift[ticketIndex],
             prizeAmount,
             block.timestamp
         );
