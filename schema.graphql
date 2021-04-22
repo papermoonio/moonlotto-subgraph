@@ -2,6 +2,8 @@ type Round @entity {
   id: ID!
   index: BigInt!
   prize: BigInt! 
+  timestampInit: BigInt!
+  timestampEnd: BigInt
   tickets: [Ticket!] @derivedFrom(field: "round")
 }
 
@@ -16,11 +18,5 @@ type Ticket @entity {
   isGifted: Boolean!
   player: Player!
   round: Round!
-  isWinner: Winner @derivedFrom(field: "ticket")
-}
-
-type Winner @entity {
-  id: ID!
-  ticket: Ticket!
-  timestamp: BigInt!
+  isWinner: Boolean!
 }
