@@ -33,7 +33,7 @@ export function handlePlayerJoined(event: PlayerJoined): void {
 
   player.save();
 
-  // ID for the ticket:
+  // ID for the ticket (round - player_address - ticket_index_round):
   // "round_number" + "-" + "player_address" + "-" + "ticket_index_per_round"
   let nextTicketIndex = event.params.ticketIndex.toString();
   let ticketId = roundId + "-" + playerId + "-" + nextTicketIndex;
