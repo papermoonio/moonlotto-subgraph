@@ -61,7 +61,7 @@ typings/
 .next
 
 # Hardhat output
-artifacts/
+artifacts/build-info
 cache/
 src/types/
 

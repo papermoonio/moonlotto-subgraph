@@ -8,9 +8,9 @@ dataSources:
     name: MoonLotto
     network: mbase
     source:
-      address: '0x5e35C075928810F61bD6f4d63978E0f7811eB351'
+      address: '0x44ddD2EC5BE2A7f3e4A465C21600bE8df644093f'
       abi: MoonLotto
-      startBlock: 125611
+      startBlock: 142255
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
