@@ -10,19 +10,6 @@ Install the node dependencies using `yarn`:
 yarn
 ```
 
-Store your private key for Moonbase Alpha deployment as an ENV variable. For example:
-
-```shell
-export MOON_PRIVATE_KEY="99b3c12287537e38c90a9219d4cb074a89a16e9cdb20bf85728ebd97c343e342"  
-```
-
-Compile the contracts:
-
-```shell
-# compiles using hardhat and solc 0.8.3
-yarn contract-build
-```
-
 Create the TS types for The Graph (requires the `artifacts` folder created by contract compilation):
 
 ```shell
@@ -31,7 +18,18 @@ yarn codegen
 
 ## Deploying contracts
 
-For deploying contracts on Moonbase Alpha, you'll need a funded account and its private key.
+For deploying contracts on Moonbase Alpha, you'll need a funded account and its private key. Store your private key for Moonbase Alpha deployment as an ENV variable:
+
+```shell
+export MOON_PRIVATE_KEY="YOUR-PRIVATE-KEY-HERE"  
+```
+
+Compile the contracts:
+
+```shell
+# compiles using hardhat and solc 0.8.3
+yarn contract-build
+```
 
 To deploy to a development Moonbeam node you can run:
 
