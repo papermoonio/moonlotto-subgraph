@@ -29,7 +29,7 @@ module.exports = {
     moonbase: {
       url: "https://rpc.testnet.moonbeam.network",
       accounts: [productionPK],
-      gasPrice: 0,
+      gasPrice: 1000000000,
       chainId: 1287,
     },
     dev: {
