@@ -27,7 +27,7 @@ module.exports = {
   defaultNetwork: "moonbase",
   networks: {
     moonbase: {
-      url: "https://rpc.testnet.moonbeam.network",
+      url: "https://rpc.api.moonbase.moonbeam.network",
       accounts: [productionPK],
       gasPrice: 1000000000,
       chainId: 1287,
